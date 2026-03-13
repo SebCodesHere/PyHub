@@ -1,4 +1,5 @@
 import socket
+from colorama import Fore, Style
 
 # Common ports and services
 COMMON_PORTS = {
@@ -17,16 +18,16 @@ COMMON_PORTS = {
 }
 
 def run():
-    host = input("Enter host/IP (example: 127.0.0.1): ")
-    port_range = input("Enter port range (example: 20-100): ")
+    host = input(Fore.CYAN + "Enter host/IP (example: 127.0.0.1): " + Fore.WHITE)
+    port_range = input(Fore.CYAN + "Enter port range (example: 20-100): " + Fore.WHITE)
 
     try:
         start, end = map(int, port_range.split("-"))
     except:
-        print("Invalid range format.")
+        print(Fore.RED + "Invalid range format.")
         return
 
-    print(f"\nScanning {host} from port {start} to {end}...\n")
+    print(Fore.BLUE + f"\nScanning {host} from port {start} to {end}...\n")
 
     for port in range(start, end + 1):
         sock = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
@@ -36,10 +37,14 @@ def run():
 
         if result == 0:
             service = COMMON_PORTS.get(port, "Unknown")
-            print(f"[OPEN ] Port {port} - {service}")
+            print(
+                Fore.GREEN + "[OPEN ] "
+                + Fore.WHITE + f"Port {port} - "
+                + Fore.YELLOW + service
+            )
         else:
-            print(f"[CLOSED] Port {port}")
+            print(Fore.RED + f"[CLOSED] Port {port}")
 
         sock.close()
 
-    print("\nScan complete.")
+    print(Fore.BLUE + "\nScan complete.\n")

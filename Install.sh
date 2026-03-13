@@ -20,7 +20,7 @@ rm -rf "$INSTALL_DIR"/*
 cp -r "/tmp/$EXTRACTED_FOLDER/"* "$INSTALL_DIR"
 
 echo "Installing dependencies..."
-python3 -m pip install --user pyfiglet requests speedtest-cli
+python3 -m pip install --user pyfiglet requests speedtest-cli colorama
 
 mkdir -p "$HOME/.local/bin"
 cat <<EOF > "$HOME/.local/bin/pyhub"
