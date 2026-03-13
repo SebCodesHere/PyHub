@@ -1,37 +1,34 @@
 @echo off
-SETLOCAL
-
-echo Installing PyHub v1.1.0...
-
-:: Paths
-set REPO=https://github.com/SebCodesHere/PyHub
+set VERSION=1.1.0
 set INSTALL_DIR=%USERPROFILE%\PyHub
 set TMP_ZIP=%TEMP%\pyhub.zip
 
-:: Make install folder
+echo Installing PyHub v%VERSION%...
+
+:: Create install directory
 if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
 
-:: Download main branch zip
-powershell -Command "Invoke-WebRequest '%REPO%/archive/refs/heads/main.zip' -OutFile '%TMP_ZIP%'"
+echo Downloading PyHub v%VERSION%...
+powershell -Command "Invoke-WebRequest https://github.com/SebCodesHere/PyHub/archive/refs/tags/v%VERSION%.zip -OutFile '%TMP_ZIP%'"
 
-:: Extract zip
+echo Extracting...
 powershell -Command "Expand-Archive -Path '%TMP_ZIP%' -DestinationPath '%TEMP%' -Force"
 
-:: Copy files to install folder
-xcopy /E /I /Y "%TEMP%\PyHub-main\*" "%INSTALL_DIR%\"
+echo Copying files...
+xcopy /E /I /Y "%TEMP%\PyHub-%VERSION%\*" "%INSTALL_DIR%\"
 
-:: Install Python dependencies
+echo Installing dependencies...
 python -m pip install --user pyfiglet requests speedtest-cli colorama
 
-:: Create pyhub.bat launcher in a folder in PATH
-set LAUNCHER=%USERPROFILE%\AppData\Local\Microsoft\WindowsApps\pyhub.bat
-echo @echo off > "%LAUNCHER%"
-echo python "%INSTALL_DIR%\pyhub.py" %%* >> "%LAUNCHER%"
+echo Creating pyhub command...
+echo @echo off > "%INSTALL_DIR%\pyhub.bat"
+echo python "%INSTALL_DIR%\pyhub.py" %%* >> "%INSTALL_DIR%\pyhub.bat"
+
+:: Add to PATH if not already
+setx PATH "%PATH%;%INSTALL_DIR%" >nul
 
 echo.
-echo PyHub installed!
-echo Open a new terminal and run:
+echo PyHub v%VERSION% installed!
+echo Restart your terminal and run:
 echo pyhub
-
-ENDLOCAL
 pause
