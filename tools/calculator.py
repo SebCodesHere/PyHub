@@ -1,7 +1,9 @@
+from colorama import Fore
+
 def run():
-    expr = input("Enter expression (e.g., 2+3*4): ")
+    expr = input("Enter expression: ")
     try:
         result = eval(expr)
-        print("Result:", result)
+        print(Fore.YELLOW + f"Result: {result}")
     except:
-        print("Invalid expression.")
+        print(Fore.RED + "Invalid expression!")

@@ -1,30 +1,23 @@
 import os
+import shutil
 import tempfile
+from colorama import Fore
 
 def run():
     temp_dir = tempfile.gettempdir()
-    print(f"Cleaning temp files in: {temp_dir}")
+    print(Fore.CYAN + f"Cleaning temporary files in: {temp_dir}")
 
-    confirm = input("Continue? (y/n): ")
-    if confirm.lower() != "y":
-        print("Cancelled.")
-        return
+    try:
+        for filename in os.listdir(temp_dir):
+            file_path = os.path.join(temp_dir, filename)
+            try:
+                if os.path.isfile(file_path) or os.path.islink(file_path):
+                    os.unlink(file_path)
+                elif os.path.isdir(file_path):
+                    shutil.rmtree(file_path)
+            except Exception as e:
+                print(Fore.RED + f"Failed to delete {file_path}. Reason: {e}")
 
-    deleted = 0
-    failed = 0
-
-    for item in os.listdir(temp_dir):
-        path = os.path.join(temp_dir, item)
-
-        try:
-            if os.path.isfile(path) or os.path.islink(path):
-                os.remove(path)
-                deleted += 1
-            elif os.path.isdir(path):
-                # skip directories to avoid permission issues
-                continue
-        except Exception:
-            failed += 1
-
-    print(f"\nDeleted files: {deleted}")
-    print(f"Skipped/failed: {failed}")
+        print(Fore.GREEN + "Temporary files cleaned successfully!")
+    except Exception as e:
+        print(Fore.RED + f"Error cleaning temp files: {e}")

@@ -1,4 +1,5 @@
 #!/usr/bin/env python3
+import os
 import pyfiglet
 from colorama import init, Fore, Style
 from tools import web_status, calculator, base64_tool, speed_test, port_scanner, temp_nuker
@@ -6,7 +7,7 @@ from tools import web_status, calculator, base64_tool, speed_test, port_scanner,
 # Initialize colorama
 init(autoreset=True)
 
-# Print colored logo
+# Print colored ASCII logo
 logo = pyfiglet.figlet_format("PyHub")
 print(Fore.BLUE + logo)
 print(Fore.WHITE + Style.BRIGHT + "Your Python CLI Toolkit\n")
