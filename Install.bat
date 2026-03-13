@@ -1,34 +1,28 @@
 @echo off
-set VERSION=1.2.0
-set INSTALL_DIR=%USERPROFILE%\PyHub
-set TMP_ZIP=%TEMP%\pyhub.zip
+setlocal
 
-echo Installing PyHub v%VERSION%...
+:: === Config ===
+set "VERSION=1.2.0"
+set "INSTALL_DIR=%USERPROFILE%\PyHub-%VERSION%"
+set "ZIP_URL=https://github.com/SebCodesHere/PyHub/archive/refs/tags/%VERSION%.zip"
+set "ZIP_PATH=%TEMP%\pyhub.zip"
 
-:: Create install directory
-if not exist "%INSTALL_DIR%" mkdir "%INSTALL_DIR%"
+echo Installing PyHub %VERSION%...
 
-echo Downloading PyHub v%VERSION%...
-powershell -Command "Invoke-WebRequest https://github.com/SebCodesHere/PyHub/archive/refs/tags/v%VERSION%.zip -OutFile '%TMP_ZIP%'"
+:: Download the zip
+powershell -Command "Invoke-WebRequest -Uri '%ZIP_URL%' -OutFile '%ZIP_PATH%'"
 
-echo Extracting...
-powershell -Command "Expand-Archive -Path '%TMP_ZIP%' -DestinationPath '%TEMP%' -Force"
+:: Extract the zip
+powershell -Command "Expand-Archive -Path '%ZIP_PATH%' -DestinationPath '%INSTALL_DIR%' -Force"
 
-echo Copying files...
-xcopy /E /I /Y "%TEMP%\PyHub-%VERSION%\*" "%INSTALL_DIR%\"
+:: Remove zip
+del "%ZIP_PATH%"
 
-echo Installing dependencies...
-python -m pip install --user pyfiglet requests speedtest-cli colorama
-
-echo Creating pyhub command...
-echo @echo off > "%INSTALL_DIR%\pyhub.bat"
-echo python "%INSTALL_DIR%\pyhub.py" %%* >> "%INSTALL_DIR%\pyhub.bat"
-
-:: Add to PATH if not already
-setx PATH "%PATH%;%INSTALL_DIR%" >nul
+:: Add to PATH (user scope)
+setx PATH "%PATH%;%INSTALL_DIR%\PyHub-%VERSION%-1.2.0"
 
 echo.
-echo PyHub v%VERSION% installed!
-echo Restart your terminal and run:
-echo pyhub
+echo PyHub %VERSION% installed in %INSTALL_DIR%
+echo Add %INSTALL_DIR% to your PATH if you want to run 'pyhub' from anywhere.
+
 pause
