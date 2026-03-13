@@ -1,5 +1,5 @@
 @echo off
-set VERSION=1.1.0
+set VERSION=1.2.0
 set INSTALL_DIR=%USERPROFILE%\PyHub
 set TMP_ZIP=%TEMP%\pyhub.zip
 
