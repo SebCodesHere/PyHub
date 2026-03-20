@@ -1,6 +1,6 @@
 import pyfiglet
 from colorama import Fore, Style, init
-from tools import web_status, calculator, base64_tool, speed_test, port_scanner, temp_nuker, ping_tool, rann_gen
+from tools import web_status, calculator, base64_tool, speed_test, port_scanner, temp_nuker, ping_tool, rann_gen, debug, info
 
 init(autoreset=True)
 
@@ -19,6 +19,7 @@ def menu():
     print(Fore.YELLOW + "6." + Style.RESET_ALL + " Temp File Nuker")
     print(Fore.YELLOW + "7." + Style.RESET_ALL + " Ping Tool")
     print(Fore.YELLOW + "8." + Style.RESET_ALL + " Random Number Generator")
+    print(Fore.YELLOW + "?" + Style.RESET_ALL + " PyHub Wiki")
     print(Fore.RED + "0." + Style.RESET_ALL + " Exit")
 
 def main():
@@ -51,6 +52,12 @@ def main():
 
         elif choice == "8":
             rann_gen.run()
+
+        elif choice == "DevModeDebug":
+            debug.run()
+
+        elif choice == "?":
+            info.run()
 
         elif choice == "0":
             print(Fore.RED + "\nExiting PyHub...")
