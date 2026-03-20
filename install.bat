@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: --- Configuration ---
-set "VERSION=1.4.0"
+set "VERSION=1.5.0.B3"
 set "REPO=https://github.com/SebCodesHere/PyHub"
 set "INSTALL_DIR=%USERPROFILE%\PyHub"
 set "ZIP_FILE=%TEMP%\pyhub.zip"
