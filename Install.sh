@@ -1,20 +1,20 @@
 #!/bin/bash
 
-VERSION="1.2.0"
+VERSION="1.3.0"
 REPO="https://github.com/SebCodesHere/PyHub"
 INSTALL_DIR="$HOME/PyHub"
 
-echo "Installing PyHub v$VERSION..."
+echo "Installing PyHub $VERSION..."
 
 mkdir -p "$INSTALL_DIR"
 
-echo "Downloading PyHub main branch..."
-curl -L "$REPO/archive/refs/heads/main.zip" -o /tmp/pyhub.zip || { echo "Download failed"; exit 1; }
+echo "Downloading PyHub release $VERSION..."
+curl -L "$REPO/archive/refs/tags/$VERSION.zip" -o /tmp/pyhub.zip || { echo "Download failed"; exit 1; }
 
 echo "Extracting..."
 unzip -o /tmp/pyhub.zip -d /tmp || { echo "Extraction failed"; exit 1; }
 
-EXTRACTED_FOLDER=$(unzip -Z -1 /tmp/pyhub.zip | head -n1 | cut -d/ -f1)
+EXTRACTED_FOLDER="PyHub-$VERSION"
 
 rm -rf "$INSTALL_DIR"/*
 cp -r "/tmp/$EXTRACTED_FOLDER/"* "$INSTALL_DIR"
@@ -27,6 +27,7 @@ cat <<EOF > "$HOME/.local/bin/pyhub"
 #!/bin/bash
 python3 $INSTALL_DIR/pyhub.py
 EOF
+
 chmod +x "$HOME/.local/bin/pyhub"
 
 if ! grep -q ".local/bin" "$HOME/.bashrc"; then
