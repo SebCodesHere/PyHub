@@ -1,5 +1,5 @@
 import socket
-from colorama import Fore, Style
+from colorama import Fore
 
 # Common ports and services
 COMMON_PORTS = {
