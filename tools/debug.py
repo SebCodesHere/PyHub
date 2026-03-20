@@ -50,7 +50,7 @@ def run():
         print(f"OS/Distro: {os_name}")
         print(f"RAM:       {total_ram} GB")
         print(f"Graphics:  {gpu}")
-        print(f"Version:   PyHub v1.4.0")
+        print(f"Version:   PyHub v1.5.0")
         print(Fore.WHITE + "--------------------")
 
         print(Fore.CYAN + "\nSelect a tool:\n")
