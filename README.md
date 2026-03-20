@@ -10,6 +10,7 @@ PyHub is a simple Python CLI toolkit that groups multiple utilities into one com
 * Internet Speed Test
 * Local Port Scanner
 * Temp File Nuker
+* Random Number Generator
 
 ## Run
 
