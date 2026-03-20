@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VERSION="1.4.0.B"
+VERSION="1.4.0.B2"
 REPO="https://github.com/SebCodesHere/PyHub"
 INSTALL_DIR="$HOME/PyHub"
 
