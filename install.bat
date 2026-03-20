@@ -2,7 +2,7 @@
 setlocal enabledelayedexpansion
 
 :: --- Configuration ---
-set "VERSION=1.5.0.B2"
+set "VERSION=1.4.0"
 set "REPO=https://github.com/SebCodesHere/PyHub"
 set "INSTALL_DIR=%USERPROFILE%\PyHub"
 set "ZIP_FILE=%TEMP%\pyhub.zip"
@@ -39,11 +39,11 @@ xcopy /E /I /Y "%TEMP%\PyHub-%VERSION%\*" "%INSTALL_DIR%" >nul
 echo [+] Checking Python dependencies...
 python -m pip install pyfiglet requests speedtest-cli colorama psutil --quiet
 
-:: 6. Create the 'pyhub.bat' shim (The command launcher)
+:: 6. Create the 'pyhub.bat' shim (Points to pyhub.py)
 echo @echo off > "%INSTALL_DIR%\pyhub.bat"
-echo python "%INSTALL_DIR%\main.py" %%* >> "%INSTALL_DIR%\pyhub.bat"
+echo python "%INSTALL_DIR%\pyhub.py" %%* >> "%INSTALL_DIR%\pyhub.bat"
 
-:: 7. Add to PATH (PowerShell Method - Safer than setx)
+:: 7. Add to PATH (PowerShell Method)
 echo [+] Registering 'pyhub' command in System PATH...
 powershell -Command "$currentPath = [Environment]::GetEnvironmentVariable('Path', 'User'); if ($currentPath -notlike '*%INSTALL_DIR%*') { [Environment]::SetEnvironmentVariable('Path', $currentPath + ';%INSTALL_DIR%', 'User') }"
 
