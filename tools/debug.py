@@ -2,51 +2,58 @@ import platform
 import psutil
 import subprocess
 import pyfiglet
+import os
 from colorama import Fore, Style, init
 from tools import web_status, calculator, base64_tool, speed_test, port_scanner, temp_nuker, ping_tool, rann_gen, info
 
 def get_system_info():
-    # 1. Get Linux Distribution
-    try:
-        distro_info = platform.freedesktop_os_release()
-        distro = f"{distro_info.get('NAME')} {distro_info.get('VERSION_ID')}"
-    except Exception:
-        distro = platform.system()
+    # 1. Get OS/Distro Name
+    current_os = platform.system()
+    if current_os == "Linux":
+        try:
+            distro_info = platform.freedesktop_os_release()
+            os_name = f"{distro_info.get('NAME')} {distro_info.get('VERSION_ID')}"
+        except:
+            os_name = "Linux (Generic)"
+    else:
+        os_name = f"Windows {platform.release()}"
 
-    # 2. Get RAM (Total)
+    # 2. Get RAM (Works on both OS)
     total_ram = round(psutil.virtual_memory().total / (1024**3), 2)
 
-    # 3. Get Graphics (GPU)
+    # 3. Get GPU (The only part that needs "if/else")
+    gpu = "Unknown GPU"
     try:
-        gpu_raw = subprocess.check_output("lspci | grep -E 'VGA|3D'", shell=True).decode()
-        gpu = gpu_raw.split(':')[-1].strip()
-    except Exception:
+        if current_os == "Windows":
+            # Windows command for GPU
+            gpu_raw = subprocess.check_output("wmic path win32_VideoController get name", shell=True).decode()
+            gpu = gpu_raw.split('\n')[1].strip()
+        else:
+            # Linux command for GPU
+            gpu_raw = subprocess.check_output("lspci | grep -E 'VGA|3D'", shell=True).decode()
+            gpu = gpu_raw.split(':')[-1].strip()
+    except:
         gpu = "Could not detect GPU"
     
-    return distro, total_ram, gpu
+    return os_name, total_ram, gpu
 
 def run():
     init(autoreset=True)
-    
-    # Fetch system specs once when debug starts
-    distro, total_ram, gpu = get_system_info()
+    os_name, total_ram, gpu = get_system_info()
 
     while True:
-        # Draw Logo
         text = pyfiglet.figlet_format("PyHub")
         print(Fore.BLUE + text)
 
-        # Show Debug Header
         print(Fore.RED + Style.BRIGHT + "DEBUG MODE ACTIVE")
         print(Fore.WHITE + "--- System Specs ---")
-        print(f"Distro:   {distro}")
-        print(f"RAM:      {total_ram} GB")
-        print(f"Graphics: {gpu}")
-        print(f"Version:  PyHub v1.4.0")
+        print(f"OS/Distro: {os_name}")
+        print(f"RAM:       {total_ram} GB")
+        print(f"Graphics:  {gpu}")
+        print(f"Version:   PyHub v1.4.0")
         print(Fore.WHITE + "--------------------")
 
-        print(Fore.CYAN + "\nSelect a tool (Debug Context):\n")
-
+        print(Fore.CYAN + "\nSelect a tool:\n")
         print(Fore.YELLOW + "1." + Style.RESET_ALL + " Web Status Checker")
         print(Fore.YELLOW + "2." + Style.RESET_ALL + " Calculator")
         print(Fore.YELLOW + "3." + Style.RESET_ALL + " Base64 Encoder/Decoder")
@@ -60,27 +67,17 @@ def run():
 
         choice = input(Fore.GREEN + "\n[DEBUG] Choose an option: ")
 
-        if choice == "1":
-            web_status.run()
-        elif choice == "2":
-            calculator.run()
-        elif choice == "3":
-            base64_tool.run()
-        elif choice == "4":
-            speed_test.run()
-        elif choice == "5":
-            port_scanner.run()
-        elif choice == "6":
-            temp_nuker.run()
-        elif choice == "7":
-            ping_tool.run()
-        elif choice == "8":
-            rann_gen.run()
-        elif choice == "?":
-            info.run()
+        # Tool mapping
+        tools = {
+            "1": web_status, "2": calculator, "3": base64_tool,
+            "4": speed_test, "5": port_scanner, "6": temp_nuker,
+            "7": ping_tool, "8": rann_gen, "?": info
+        }
+
+        if choice in tools:
+            tools[choice].run()
         elif choice == "0":
-            print(Fore.YELLOW + "\nReturning to standard mode...")
-            return # This exits debug.run() and goes back to main.py
+            return
         else:
             print(Fore.RED + "Invalid option")
 
